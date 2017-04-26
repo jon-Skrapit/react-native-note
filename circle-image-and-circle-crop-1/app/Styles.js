@@ -18,11 +18,21 @@ export default styles = StyleSheet.create({
   },
   other_info:{
     flex:3,
-    backgroundColor: 'skyblue'
   },
   icon:{
     width:100,
     height:100,
     borderRadius:50,
-  }
+  },
+  text:{
+    color: "black",
+    fontSize:22,
+  },
+  modal:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    height:200,
+    flexDirection: 'column',
+    width:300,
+  },
 });

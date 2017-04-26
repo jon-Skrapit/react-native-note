@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, Image, TouchableOpacity, NativeModules} from 'react-native';
-import {Container} from 'native-base';
+import ModalBox from 'react-native-modalbox';
+import {Container,Button} from 'native-base';
 import styles from './Styles.js';
 import ImagePicker from 'react-native-image-crop-picker';
 
@@ -10,6 +11,17 @@ export default class MainComponent extends Component{
 	  this.state = {
 	  	image: null,
 	  };
+	}
+	pickSingleWithCamera(cropping){
+		ImagePicker.openCamera({
+			cropping:cropping,
+			width:500,
+			height:500,
+		}).then(image =>{
+			this.setState({
+				image: {uri: image.path, width: image.width, height: image.height},
+			});
+		}).catch(e=>alert(e));
 	}
 	pickSingle(cropit, circular = false){
 		ImagePicker.openPicker({
@@ -39,7 +51,7 @@ export default class MainComponent extends Component{
 		return(
 			<Container style={styles.container}>
 				<View style={styles.user_info}>
-					<TouchableOpacity onPress={() => this.pickSingle(true,true)}>
+					<TouchableOpacity onPress={() => this.refs.modal.open()}>
 						{this.renderImage()}
 					</TouchableOpacity>
 					<View style={styles.name_and_email}>
@@ -48,9 +60,32 @@ export default class MainComponent extends Component{
 					</View>
 				</View>
 				<View style={styles.other_info}>
-					<Text>2</Text>
+					<Text></Text>
 				</View>
+				<ModalBox style={styles.modal} position={"bottom"} ref={"modal"}>
+					<View>
+						<Button style={native_base_styles.modal_button} onPress={() => this.pickSingle(true,true)}>
+							<Text style={{color : 'white'}}>album</Text>
+						</Button>
+						<Button style={native_base_styles.modal_button} onPress={() => this.pickSingleWithCamera(true)}>
+							<Text style={{color : 'white'}}>take a photo</Text>
+						</Button>
+						<Button style={native_base_styles.modal_button} onPress={() => this.refs.modal.close()}>
+							<Text style={{color : 'white'}}>cancle</Text>
+						</Button>	
+					</View>
+				</ModalBox>
 			</Container>
 		);
 	}
+};
+native_base_styles={
+  modal_button:{
+    margin: 4,
+    backgroundColor: "powderblue",
+    color: "white",
+    alignItems: 'center',
+    justifyContent: 'center',
+    width:200,
+  },
 };
